@@ -1,0 +1,12 @@
+<div class="container" style="padding: 2rem;">
+  <h1>🏆 Tennis App</h1>
+
+  <button (click)="pingBackend()" mat-raised-button color="primary">
+    Test Ping Backend
+  </button>
+
+  <div *ngIf="pingResult" style="margin-top: 1.5rem;">
+    <strong>Risposta dal backend:</strong>
+    <pre>{{ pingResult }}</pre>
+  </div>
+</div>
