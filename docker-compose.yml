@@ -1,0 +1,49 @@
+services:
+
+  frontend:
+    container_name: tennis_app_frontend
+    build:
+      context: ./frontend
+      dockerfile: Docker/Dockerfile
+    ports:
+      - "80:80"  
+    networks:
+      - tennis-app-net
+
+  backend:
+    container_name: tennis_app_backend
+    build:
+      context: .                        
+      dockerfile: backend/Api/Docker/Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - CONNECTION_STRING=${CONNECTION_STRING}
+    restart: unless-stopped
+    networks:
+      - tennis-app-net
+    depends_on:
+      - db
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: tennis_app_db
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "Your_password123"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - mssqldata:/var/opt/mssql
+    restart: unless-stopped
+    networks:
+      - tennis-app-net
+
+networks:
+  tennis-app-net:
+    driver: bridge
+
+volumes:
+  mssqldata:
+    driver: local

@@ -1,0 +1,72 @@
+
+services:
+  nginx:
+    container_name: nginx_proxy_giocoevento
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile-locale
+    ports:
+      - "80:80"
+      #- "443:443"
+    volumes:
+      #- ./ssl:/etc/nginx/ssl:ro
+      - ./public/assets:/usr/share/nginx/html/public/assets
+      - ./logs/nginx:/var/log/nginx  
+    networks:
+      - giocoevento-net
+    depends_on:
+      - backend
+      - db_mysql
+      - giocochatstatic
+      - react_giocochat
+
+  giocochatstatic:
+    container_name: giocochatstatic
+    build:
+      context: ./giocochat
+      dockerfile: Dockerfile
+    networks:
+      - giocoevento-net
+
+  react_giocochat:
+    container_name: react_giocochat
+    build:
+      context: ./react-giocochat
+      dockerfile: Dockerfile
+    volumes:
+      - ./logs/nginx_react_giocochat:/var/log/nginx
+    networks:
+      - giocoevento-net
+
+  backend:
+    container_name: backend_giocoevento
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db_mysql
+    networks:
+      - giocoevento-net
+
+  db_mysql:
+    container_name: db_mysql_giocoevento
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - giocoevento-net
+      
+volumes:
+  db-data:
+
+networks:
+  giocoevento-net:
+    driver: bridge

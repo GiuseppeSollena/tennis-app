@@ -1,0 +1,19 @@
+# Node & Angular
+node_modules/
+dist/
+npm-debug.log
+
+# .NET
+bin/
+obj/
+*.user
+*.vs
+*.suo
+
+# Docker
+mssqldata/
+.env
+
+# OS junk
+.DS_Store
+Thumbs.db
