@@ -8,5 +8,6 @@ namespace Api.Data
         public TennisDbContext(DbContextOptions<TennisDbContext> options) : base(options) {}
 
         public DbSet<Player> Players { get; set; }
+        public DbSet<Team> Teams { get; set; }
     }
 }

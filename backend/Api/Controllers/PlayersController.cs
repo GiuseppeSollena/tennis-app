@@ -24,28 +24,21 @@ namespace Api.Controllers
     }
 
     [HttpPost]
-    public ActionResult<Player> Post(PlayerCreateDto playerCreateDto)
+    public ActionResult<Player> Post(Player player)
     {
-      var player = new Player
-      {
-        Name = playerCreateDto.Name,
-        Surname = playerCreateDto.Surname,
-        Email = playerCreateDto.Email
-      };
       _context.Players.Add(player);
       _context.SaveChanges();
       return CreatedAtAction(nameof(Get), new { id = player.Id }, player);
     }
 
     [HttpPut("{id}")]
-    public IActionResult Put(int id, PlayerUpdateDto playerUpdateDto)
+    public IActionResult Put(int id, Player player)
     {
-      var player = _context.Players.Find(id);
-      if (player == null) return NotFound();
+      var existingPlayer = _context.Players.Find(id);
+      if (existingPlayer == null) return NotFound();
 
-      player.Name = playerUpdateDto.Name;
-      player.Surname = playerUpdateDto.Surname;
-      player.Email = playerUpdateDto.Email;
+      existingPlayer.Name = player.Name;
+      existingPlayer.TeamId = player.TeamId;
       _context.SaveChanges();
 
       return NoContent();

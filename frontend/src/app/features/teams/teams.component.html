@@ -1,0 +1,30 @@
+<div class="teams-container" [formGroup]="form">
+  <div formArrayName="teams">
+    <mat-tab-group>
+      <mat-tab *ngFor="let team of teams.controls; let i = index" [label]="'Squadra ' + (i+1)">
+        <div class="team-block" [formGroupName]="i">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Nome squadra</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+
+          <div class="players">
+            <h3>Giocatori</h3>
+            <div *ngFor="let player of getPlayers(i).controls; let j = index">
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label>Nome giocatore {{ j + 1 }}</mat-label>
+                <input matInput [formControl]="player" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <div class="submit-section">
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="!form.valid">
+      Avanti
+    </button>
+  </div>
+</div>

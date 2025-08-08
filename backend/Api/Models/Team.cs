@@ -1,10 +1,8 @@
 namespace Api.Models;
 
-public class Player
+public class Team
 {
     public int Id { get; set; }
     public string Name { get; set; } = "";
-    
-    public int TeamId { get; set; }
-    public Team? Team { get; set; }
+    public List<Player> Players { get; set; } = new();
 }
